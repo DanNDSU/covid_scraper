@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="scraper_detail">
+    <h2>{{ scraper.name }}</h2>
+    <p>{{ scraper.ip_address }} | {{ scraper.port }} | {{ scraper.seed }}</p>
+  </div>
+
+  <p>
+    <a href="{% url 'scraper_edit' scraper.pk %}"> Edit Scraper | </a>
+    <a href="{% url 'scraper_delete' scraper.pk %}">Delete Scraper | </a>
+    <a href="{% url 'output' scraper.pk%}">Output </a>
+  </p>
+{% endblock content %}

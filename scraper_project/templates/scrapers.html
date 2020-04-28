@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Current Scrapers:</h2>
+  {% for scraper in object_list %}
+    <div class="scraper-entry">
+      <h2><a href="{% url 'scraper_detail' scraper.pk %}">{{ scraper.name }}</a></h2>
+      <p>{{ scraper.ip_address }} | {{ scraper.port }} | {{scraper.seed }}</p>
+    </div>
+  {% endfor %}
+  <h2><a href="{% url 'megascrape' %}">Scrape All</a></h2>
+{% endblock content %}
