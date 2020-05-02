@@ -12,7 +12,7 @@ def GetOutput(c_host, c_port, seed_url, c_name):
 		s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 		s.connect((host,port))
 		HEADERSIZE = 10
-		to_return = "No data found."
+		to_return = []
 		while True:
 			url= seed_url
 			s.send(url.encode('utf-8'))
@@ -34,9 +34,10 @@ def GetOutput(c_host, c_port, seed_url, c_name):
 		s.close()
 
 	except:
-	 	to_return = ["No server found."]
+		return ["No server found.", "Try again later."]
 
 	to_return_new = []
+
 	for item in to_return:
 		to_return_new.append([item, c_name])
 

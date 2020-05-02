@@ -5,23 +5,33 @@ from bs4 import BeautifulSoup
 import requests
 import re
 import pickle
-
-import sys
-sys.setrecursionlimit(10 ** 8)
+from datetime import datetime, timedelta
+import random
 
 def WebCrawl(url):
 	try:
 		page = requests.get(url)
 		soup = BeautifulSoup(page.text, 'html.parser')
-		#title = soup.find_all('title')
+
+		# prints any titles from the first page hit.
+		titles = soup.find_all('title')
 		links = soup.find_all('a', attrs={'href': re.compile("^http")})
 
 		tf_results = []
 		url_list = []
-		target=[]
 		keyword1='covid-19'
 		keyword2='coronavirus'
+
+		# This works to place a time-out stop on the server.
+		start_time = datetime.now()
+		random_number = random.randint(0, 3000)
+
 		for link in links:
+			current_time = datetime.now()
+			if current_time > start_time + timedelta(milliseconds = 30000 + random_number):
+				break
+
+			target=[]
 			address = link.get('href')
 			try:
 				# get texts of address to decide whether this address is about covid - 19
@@ -33,15 +43,14 @@ def WebCrawl(url):
                 # loop through texts
 				for idx in range(len(texts2)):
 					L = texts2[idx].get_text()
-					tf_value = (keyword1.lower() in L.lower()) or (keyword2.lower() in L.lower())
-					tf_results.append(tf_value)
-					if tf_value == True:
+
+					if (keyword1.lower() in L.lower()) or (keyword2.lower() in L.lower()):
 						target.append(L)
+						url_list.append([address,target])
+						break
+
 			except Exception as ie:
 				pass
-
-			if any(True == s for s in tf_results):
-				url_list.append([address,target])
 
 	except Exception as ie:
 		pass
@@ -52,27 +61,29 @@ def WebCrawl(url):
 print_lock = threading.Lock()
 
 def threaded(c):
-	HEADERSIZE = 100
+	HEADERSIZE = 10
 	while True:
-		url = c.recv(40960)
+		url = c.recv(4096)
 		if not url:
 			print('Bye')
 			print_lock.release()
 			break
 		my_url=url.decode('utf-8')
-		print('the website you are crawling is: ', my_url)
-		url_list= WebCrawl(my_url)
-		print('crawled links #. is : ', len(url_list))
-
+		print('the website you are crawling is: ')
+		print(my_url)
+		url_list = WebCrawl(my_url)
+		print('crawled links #. is : ')
+		print(len(url_list))
 		msg=pickle.dumps(url_list)
 		msg = bytes(f"{len(msg):<{HEADERSIZE}}", 'utf-8')+msg
 		c.send(msg)
 		print('data sent!')
+		print(url_list)
 	c.close()
 
 def Main():
 	host = ""
-	port = 12345
+	port = 12346
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	s.bind((host, port))
 	print("socket binded to port", port)
