@@ -5,14 +5,14 @@
 {% block content %}
 <h2>{{ ip_address }} | {{ port }} | {{ seed }}</h2>
 {% for message in messages %}
-{% if message == "No server found." %}
-<p>{{ message }}</p>
-{% else %}
-<p><a href="{{ message|first|first }}">{{ message|first|first }}</a> | {{ message|last }} |
-<a href="{% url 'scraper_further_output' name=message|last seed=message|first %}">Scrape This Site</a></p>
+    {% if message|first|first == "Scrape unsuccessful." %}
+        <p>{{ message|first|first }} | {{ message|last }}
+    {% else%}
+        <p><a href="{{ message|first|first }}">{{ message|first|first }}</a> | {{ message|last }} |
+        <a href="{% url 'scraper_further_output' name=message|last seed=message|first|first %}">Scrape This Site</a></p>
+    {% endif %}
 <p>
   {{ message|first|last }}
 </p>
-{% endif %}
 {% endfor %}
 {% endblock content %}

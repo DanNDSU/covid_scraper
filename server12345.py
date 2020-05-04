@@ -28,10 +28,9 @@ def WebCrawl(url):
 
 		for link in links:
 			current_time = datetime.now()
-			if current_time > start_time + timedelta(milliseconds = 30000 + random_number):
+			if current_time > start_time + timedelta(milliseconds = 20000 + random_number):
 				break
 
-			target=[]
 			address = link.get('href')
 			try:
 				# get texts of address to decide whether this address is about covid - 19
@@ -45,15 +44,15 @@ def WebCrawl(url):
 					L = texts2[idx].get_text()
 
 					if (keyword1.lower() in L.lower()) or (keyword2.lower() in L.lower()):
-						target.append(L)
+						target = L
 						url_list.append([address,target])
 						break
 
 			except Exception as ie:
-				pass
+				print("Error in crawling web page.")
 
 	except Exception as ie:
-		pass
+		print("Error in crawling web page.")
 
 	return url_list
 
@@ -63,22 +62,25 @@ print_lock = threading.Lock()
 def threaded(c):
 	HEADERSIZE = 10
 	while True:
-		url = c.recv(4096)
-		if not url:
-			print('Bye')
-			print_lock.release()
-			break
-		my_url=url.decode('utf-8')
-		print('the website you are crawling is: ')
-		print(my_url)
-		url_list = WebCrawl(my_url)
-		print('crawled links #. is : ')
-		print(len(url_list))
-		msg=pickle.dumps(url_list)
-		msg = bytes(f"{len(msg):<{HEADERSIZE}}", 'utf-8')+msg
-		c.send(msg)
-		print('data sent!')
-		print(url_list)
+		try:
+			url = c.recv(4096)
+			if not url:
+				print('Bye')
+				print_lock.release()
+				break
+			my_url=url.decode('utf-8')
+			print('the website you are crawling is: ')
+			print(my_url)
+			url_list = WebCrawl(my_url)
+			print('crawled links #. is : ')
+			print(len(url_list))
+			msg=pickle.dumps(url_list)
+			msg = bytes(f"{len(msg):<{HEADERSIZE}}", 'utf-8')+msg
+			c.send(msg)
+			print('data sent!')
+			print(url_list)
+		except:
+			print("Error in sending data.")
 	c.close()
 
 def Main():
