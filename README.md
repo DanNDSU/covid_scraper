@@ -1,27 +1,46 @@
-# python_sockets
-A client-server setup for python - will expand to multiple servers eventually
-Currently includes a separate web scraper that we'll need to integrate into the server.
+# COVID-SCRAPER
+A Django application that builds a distributed web scraper.
+Consists of three identical server files that return a filtered list of scraped
+websites, along with the first paragraph element in each site that contains
+either "covid-19" or "coronavirus."
+Also consists of the web app that manages these servers and displays the results.
 
-# To run the client-server:
-In one terminal, cd to the folder and run python socket.py
-Then, in another terminal, cd to the folder and run python client.py
+# Dependencies
+This website depends on three python modules: django, requests, and beautifulsoup4.
+While you can install each directly using pip install _____, it is much more
+recommended to use pipenv for this. Pipenv creates a virtual environment
+and installs the dependencies in that environment, so your computer
+does not become full of extraneous modules installed globally.
 
-Currently, this takes in a string of input in the client, then reverses the string in the server.
-Note: the server will not shut down on its own. You'll have to Ctrl + D (in bash terminal) or just close terminal (Windows).
+## To use pipenv:
+Install pipenv with $ pip install pipenv
+cd into covid_scraper with $ cd covid_scraper
+initiate environment and dependencies: $ pipenv install
+start up the environment: $ pipenv shell
 
-# To run the web scraper:
-First, you'll need to install requests and beautiful soup.
+You'll know the environment is created and running when (covid_scraper)
+appears to the left of the terminal prompt.
+To exit your pipenv environment, type exit into the terminal.
 
-I'd recommend doing this by installing Pipenv (as this is currently set up).
-To do this, install Pipenv (by running $ pip install pipenv), then run $ pipenv install
-To start up a Pipenv environment, run $ pipenv shell
-You'll know if your environment is running if "(python_sockets)" appears on the left side of the terminal
-To exit your running environment, type exit into the terminal
+# Running the application
+## Start the servers.
+In one terminal, cd into covid_scraper, then $ pipenv shell
+Start the first server with $ python server12345.py
 
+Start two more terminals, and do the same, except with
+$ python server12346.py
+$ python server12347.py
 
-If you don't want to do pipenv, run:
+## Start Django
+In another terminal (you'll have four total),
+cd into covid_scraper, then $ pipenv shell, then cd into scraper_project
 
-$ pip install requests
-$ pip install beautifulsoup4
+### Create User Account
+With the terminal in the scraper_project directory,
+run $ python manage.py createsuperuser
+and respond to the prompts to make your username and password
+you can skip entering an e-mail address.
 
-Don't forget the "4" at the end of "beautifulsoup"!
+start Django with $ python manage.py runserver
+
+This will allow you to access the website at localhost:8000/

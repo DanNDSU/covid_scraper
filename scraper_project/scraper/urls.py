@@ -1,3 +1,6 @@
+# the various URLs the website will need are in urlpatterns
+# they build the website pages using the django view classes
+
 from django.urls import path, register_converter
 
 from . import converters
