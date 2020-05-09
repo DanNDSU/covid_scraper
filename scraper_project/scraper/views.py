@@ -1,5 +1,5 @@
 # relies on django's class based views
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.base import TemplateView
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -47,21 +47,24 @@ class ScraperMegaOutputView(TemplateView):
         return context
 
 # logic for web form to make a new scraper
-class ScraperCreateView(CreateView):
+class ScraperCreateView(LoginRequiredMixin, CreateView):
     model = Scraper
     template_name = 'scraper_new.html'
     fields = ['name', 'ip_address', 'port', 'seed']
     success_url = reverse_lazy('scrapers')
+    login_url = 'login'
 
 # logic for web form to edit a scraper
-class ScraperUpdateView(UpdateView):
+class ScraperUpdateView(LoginRequiredMixin, UpdateView):
     model = Scraper
     template_name = 'scraper_edit.html'
     fields = ['name', 'ip_address', 'port', 'seed']
     success_url = reverse_lazy('scrapers')
+    login_url = 'login'
 
-# logic for web form to remove a scraper 
-class ScraperDeleteView(DeleteView):
+# logic for web form to remove a scraper
+class ScraperDeleteView(LoginRequiredMixin, DeleteView):
     model = Scraper
     template_name = 'scraper_delete.html'
     success_url = reverse_lazy('scrapers')
+    login_url = 'login'

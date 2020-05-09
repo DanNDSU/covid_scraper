@@ -6,12 +6,12 @@
 <h2>{{ ip_address }} | {{ port }} | {{ seed }}</h2>
 {% for message in messages %}
     {% if message|first|first == "Scrape unsuccessful." %}
-        <p>{{ message|first|first }} | {{ message|last }}
+        <p class="info">{{ message|first|first }} | {{ message|last }}
     {% else%}
-        <p><a href="{{ message|first|first }}">{{ message|first|first }}</a> | {{ message|last }} |
+        <p class="info"><a href="{{ message|first|first }}">{{ message|first|first }}</a> | {{ message|last }} |
         <a href="{% url 'scraper_further_output' name=message|last seed=message|first|first %}">Scrape This Site</a></p>
     {% endif %}
-<p>
+<p class="scraped">
   {{ message|first|last }}
 </p>
 {% endfor %}

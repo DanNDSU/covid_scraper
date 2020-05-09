@@ -9,9 +9,14 @@ header {
   display: flex;
 }
 
-header h1 a {
-  color: red;
-  text-decoration: none;
+.scraped {
+    border-bottom: thin solid gray;
+    margin-bottom: 6px;
+    padding-bottom: 3pxpx;
+}
+
+.info{
+    margin-bottom: 3px;
 }
 
 .nav-left {
