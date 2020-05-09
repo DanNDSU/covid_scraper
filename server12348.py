@@ -94,7 +94,7 @@ def threaded(c):
 
 def Main():
 	host = ""
-	port = 12346
+	port = 12348
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	s.bind((host, port))
 	print("socket binded to port", port)

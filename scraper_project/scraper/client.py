@@ -1,4 +1,5 @@
 # Runs a single client instance method to get output from the server.
+# Base code is from https://www.geeksforgeeks.org/socket-programming-multi-threading-python/
 
 import socket
 import pickle
@@ -29,7 +30,7 @@ def GetOutput(c_host, c_port, seed_url, c_name):
 				try:
 					# gets the report sent by the server
 					# we have a large buffer size because each scrape uses it only once
-					msg=s.recv(65536)
+					msg=s.recv(32768)
 
 					if new_msg:
 						msglen = int(msg[:HEADERSIZE])

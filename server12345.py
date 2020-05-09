@@ -1,3 +1,7 @@
+# Base code is from https://www.geeksforgeeks.org/socket-programming-multi-threading-python/
+# Crawl and scrape tutorials and base code:
+# https://www.digitalocean.com/community/tutorials/how-to-work-with-web-data-using-requests-and-beautiful-soup-with-python-3
+
 import socket
 from _thread import *
 import threading
@@ -80,6 +84,10 @@ def threaded(c):
 			print('data sent!')
 			print(url_list)
 		except:
+			url_list.clear()
+			url_list.append(["No message sent.", "Error sending data."])
+			msg=picke.dumps(url_list)
+			c.send(msg)
 			print("Error in sending data.")
 	c.close()
 
